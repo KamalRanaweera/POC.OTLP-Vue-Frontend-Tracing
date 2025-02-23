@@ -1,2 +1,8 @@
 # POC.OTLP-Vue-Frontend-Tracing
-A proof of concept for using frontend tracing with Open Telemetry on Vue apps.
+A proof of concept demonstrating frontend tracing in Vue applications using OpenTelemetry.
+
+
+
+
+
+
