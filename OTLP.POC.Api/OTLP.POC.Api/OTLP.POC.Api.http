@@ -1,0 +1,6 @@
+@OTLP.POC.Api_HostAddress = http://localhost:5285
+
+GET {{OTLP.POC.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
