@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { WeatherApi } from "@/api/weatherApi";
 import appInsights from "../appInsights";
 
 const trackCustomEvent = () => {
@@ -25,6 +26,18 @@ const trackTrace = () => {
   console.log("Custom trace sent to Azure Monitor");
 };
 
+
+const loadData = async () => {
+  const api = new WeatherApi("https://localhost:8000", appInsights);
+  const response = await api.get("/WeatherForecast");
+  if(response.ok) {
+    console.log("Response OK");
+  }
+  else {
+    console.log("Response Status: ", response.status);
+  }
+};
+
 </script>
 
 <template>
@@ -33,6 +46,8 @@ const trackTrace = () => {
     <button @click="trackCustomEvent">Track Event</button>
     <button @click="trackError">Track Error</button>
     <button @click="trackTrace">Track Trace</button>
+    <button @click="loadData">Load Data</button>
+
   </div>
 
 </template>

@@ -34,7 +34,6 @@ export class WebClient {
                     properties: { endpoint: endpoint, error: (error as Error).message }
                 });
             }
-            
             console.error("API request error: ", error);
             throw error;
         }
