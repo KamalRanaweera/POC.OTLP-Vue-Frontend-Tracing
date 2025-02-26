@@ -21,6 +21,11 @@ namespace OTLP.POC.Api.Controllers
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
+            using var activity = Telemetry.ActivitySource.StartActivity("GetWeatherForecast");
+            activity?.SetTag("custom.attribute", "myValue"); // Add metadata
+            activity?.SetTag("user.id", "12345");
+            activity?.SetBaggage("correlation.id", Guid.NewGuid().ToString());
+
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
