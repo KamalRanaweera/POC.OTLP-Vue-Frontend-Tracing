@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace OTLP.POC.Api.Controllers
 {
@@ -19,12 +21,27 @@ namespace OTLP.POC.Api.Controllers
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        public async Task<IEnumerable<WeatherForecast>> Get()
         {
-            using var activity = Telemetry.ActivitySource.StartActivity("GetWeatherForecast");
-            activity?.SetTag("custom.attribute", "myValue"); // Add metadata
-            activity?.SetTag("user.id", "12345");
-            activity?.SetBaggage("correlation.id", Guid.NewGuid().ToString());
+            HttpClient client = new HttpClient();
+            var response = await client.GetAsync("https://localhost:8000/WeatherForecast/GetData");
+
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonString = await response.Content.ReadAsStringAsync();
+                var data = JsonSerializer.Deserialize<WeatherForecast[]>(jsonString);
+                return data!;
+            }
+            else
+            {
+                Console.WriteLine($"Error: {response.StatusCode}");
+                return [];
+            }
+        }
+
+        [HttpGet("GetData")]
+        public IEnumerable<WeatherForecast> GetData()
+        {
 
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {

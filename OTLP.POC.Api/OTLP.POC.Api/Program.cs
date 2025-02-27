@@ -4,6 +4,7 @@ using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using OTLP.POC.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,6 +72,8 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+app.UseMiddleware<TelemetryMiddleware>();
 
 app.UseCors("AllowAnyOrigin");
 

@@ -29,7 +29,20 @@ const trackTrace = () => {
 
 const loadData = async () => {
   const api = new WeatherApi("https://localhost:8000", appInsights);
-  const response = await api.get("/WeatherForecast");
+  // const response = await api.get("/WeatherForecast");
+  const response = await api.fetchData("/WeatherForecast");
+  if(response.ok) {
+    console.log("Response OK");
+  }
+  else {
+    console.log("Response Status: ", response.status);
+  }
+};
+
+const callEndpoint404 = async () => {
+  const api = new WeatherApi("https://localhost:8000", appInsights);
+  // const response = await api.get("/WeatherForecast");
+  const response = await api.fetchData("/endPoint404");
   if(response.ok) {
     console.log("Response OK");
   }
@@ -47,6 +60,7 @@ const loadData = async () => {
     <button @click="trackError">Track Error</button>
     <button @click="trackTrace">Track Trace</button>
     <button @click="loadData">Load Data</button>
+    <button @click="callEndpoint404">404 Endpoint</button>
 
   </div>
 

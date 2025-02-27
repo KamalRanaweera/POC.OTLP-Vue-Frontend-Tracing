@@ -7,6 +7,5 @@ export class WeatherApi extends WebClient {
         super(apiRoot, appInsights);
     }
 
-
-    
+  
 }
