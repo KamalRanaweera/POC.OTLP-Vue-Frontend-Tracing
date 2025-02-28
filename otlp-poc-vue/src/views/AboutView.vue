@@ -1,19 +1,18 @@
 <script setup lang="ts">
-import { WeatherApi } from "@/api/weatherApi";
+import { WebClient } from "@/api/webClient";
 import appInsights from "../appInsights";
+import { ref } from "vue";
 
-const trackCustomEvent = () => {
-  appInsights.trackEvent({ name: "ButtonClicked", properties: { button: "Track Event" } });
-  console.log("Custom event sent to Azure Monitor");
+const webClient = new WebClient();
+const api1 = "https://localhost:8000";
+const messag = ref("");
+
+
+const noAction = () => {
 };
 
-const trackError = () => {
-  try {
-    throw new Error("Something went wrong!");
-  } catch (error) {
-    appInsights.trackException({ exception: error as Error });
-    console.log("Custom exception sent to Azure Monitor");
-  }
+const uiException = () => {
+    throw new Error("Throwing UI exception.");
 };
 
 
@@ -27,28 +26,14 @@ const trackTrace = () => {
 };
 
 
-const loadData = async () => {
-  const api = new WeatherApi("https://localhost:8000", appInsights);
-  // const response = await api.get("/WeatherForecast");
-  const response = await api.fetchData("/WeatherForecast");
-  if(response.ok) {
-    console.log("Response OK");
-  }
-  else {
-    console.log("Response Status: ", response.status);
-  }
+const call200 = async () => {
+  const response = await webClient.fetchData(`${api1}/WeatherForecast`);
+  messag.value = `Response: ${response.status}`;
 };
 
-const callEndpoint404 = async () => {
-  const api = new WeatherApi("https://localhost:8000", appInsights);
-  // const response = await api.get("/WeatherForecast");
-  const response = await api.fetchData("/endPoint404");
-  if(response.ok) {
-    console.log("Response OK");
-  }
-  else {
-    console.log("Response Status: ", response.status);
-  }
+const call404 = async () => {
+  const response = await webClient.fetchData(`${api1}/NotExistingEndpoint`);
+  messag.value = `Response: ${response.status}`;
 };
 
 </script>
@@ -56,11 +41,13 @@ const callEndpoint404 = async () => {
 <template>
   <div>
     <h1>Triggers</h1>
-    <button @click="trackCustomEvent">Track Event</button>
-    <button @click="trackError">Track Error</button>
+    <button @click="noAction">No Action</button>
+    <button @click="uiException">UI Exception</button>
     <button @click="trackTrace">Track Trace</button>
-    <button @click="loadData">Load Data</button>
-    <button @click="callEndpoint404">404 Endpoint</button>
+    <button @click="call200">Call 200</button>
+    <button @click="call404">Call 404</button>
+
+    <div class="info">{{ messag }}</div>
 
   </div>
 
