@@ -46,19 +46,19 @@ export class WebClient {
         const response = await fetch(`${this._apiRoot}/${this.trimSlashes(endpoint)}`, {
             headers: {
               "Content-Type": "application/json",
-              "traceparent": this._appInsights!.context.telemetryTrace.traceID!, // Ensure trace context is passed
+ //             "traceparent": this._appInsights!.context.telemetryTrace.traceID!, // Ensure trace context is passed
             },
           });
         
-          this._appInsights?.trackDependencyData({
-            id: this._appInsights?.context.telemetryTrace.parentID || "default-span",
-            target: "your-api.com",
-            name: "FetchWeather",
-            duration: ((new Date()).getTime() - t1)/1000, // Adjust based on actual request time
-            success: response.ok,
-            responseCode: response.status,
-            properties: { traceId: this._appInsights!.context.telemetryTrace.traceID },
-          });
+        //   this._appInsights?.trackDependencyData({
+        //     id: this._appInsights?.context.telemetryTrace.parentID || "default-span",
+        //     target: "your-api.com",
+        //     name: "FetchWeather",
+        //     duration: ((new Date()).getTime() - t1)/1000, // Adjust based on actual request time
+        //     success: response.ok,
+        //     responseCode: response.status,
+        //     properties: { traceId: this._appInsights!.context.telemetryTrace.traceID },
+        //   });
         
           return response;        
     };

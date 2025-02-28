@@ -73,7 +73,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-app.UseMiddleware<TelemetryMiddleware>();
+//app.UseMiddleware<TelemetryMiddleware>();
 
 app.UseCors("AllowAnyOrigin");
 
