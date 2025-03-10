@@ -6,24 +6,19 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 
-import "./appInsights"; // Import Application Insights setup
-import appInsights from './appInsights'
+// import "./appInsights"; // Import Application Insights setup
 
-const app = createApp(App)
+import appInsights from "./appInsights";
 
-// Store trace context for ongoing operations
-let currentTraceId: string | null = null;
-let currentSpanId: string | null = null;
-
-// Track all button clicks
+// Reporting button clicks
 document.addEventListener("click", (event) => {
     const target = event.target as HTMLElement;
     if (target.tagName === "BUTTON") {
-
+  
         // Generate a new trace ID for this button click
-        currentTraceId = appInsights.context.telemetryTrace.traceID!;
-        currentSpanId = appInsights.context.telemetryTrace.parentID!;  
-
+        const currentTraceId = appInsights.context.telemetryTrace.traceID!;
+        const currentSpanId = appInsights.context.telemetryTrace.parentID!;  
+  
         appInsights.trackEvent({ 
             name: "ButtonClick", 
             properties: { 
@@ -34,11 +29,12 @@ document.addEventListener("click", (event) => {
                 spanId: currentSpanId,
             }
         });
-
-        console.log(`Button clicked: ${target.innerText}, Trace ID: ${currentTraceId}, Span ID: ${currentSpanId}`);
+  
+        console.log(`Button clicked (appInsights.ts): ${target.innerText}, Trace ID: ${currentTraceId}, Span ID: ${currentSpanId}`);
     }
   });
-  
+    
+const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)

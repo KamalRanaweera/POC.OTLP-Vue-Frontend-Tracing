@@ -16,17 +16,16 @@ builder.Services.AddOpenTelemetry()
     {
         options
             .AddAspNetCoreInstrumentation()
-            .AddHttpClientInstrumentation();
-
-        options.AddOtlpExporter();
+            .AddHttpClientInstrumentation()
+            .AddOtlpExporter();
     })
     .WithTracing(options =>
     {
         options
             .AddAspNetCoreInstrumentation()
-            .AddHttpClientInstrumentation();
-
-        options.AddOtlpExporter();
+            .AddHttpClientInstrumentation()
+            .SetSampler(new ParentBasedSampler(new TraceIdRatioBasedSampler(0.001)))
+            .AddOtlpExporter();
     });
 
 
